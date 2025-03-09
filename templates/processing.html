@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Procesando Videos...</title>
+    <style>
+        body {
+            background-color: black;
+            color: white;
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        h1 {
+            font-size: 2rem;
+            background: linear-gradient(90deg, cyan, fuchsia);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: glow 1.5s infinite alternate;
+        }
+        @keyframes glow {
+            from { text-shadow: 0 0 5px cyan, 0 0 10px fuchsia; }
+            to { text-shadow: 0 0 10px cyan, 0 0 20px fuchsia; }
+        }
+        .progress-container {
+            width: 80%;
+            max-width: 500px;
+            background-color: #333;
+            border-radius: 10px;
+            margin: 20px auto;
+            overflow: hidden;
+            height: 25px;
+            position: relative;
+        }
+        .progress-bar {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, fuchsia, cyan);
+            border-radius: 10px;
+            transition: width 0.3s ease-in-out;
+        }
+        p {
+            font-size: 1.2rem;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Procesando Videos...</h1>
+    
+    <div class="progress-container">
+        <div class="progress-bar" id="progress-bar"></div>
+    </div>
+
+    <p id="progress-text">0%</p>
+
+    <script>
+        function updateProgress() {
+            let progress = 0;
+            let progressBar = document.getElementById("progress-bar");
+            let progressText = document.getElementById("progress-text");
+
+            let interval = setInterval(() => {
+                progress += Math.floor(Math.random() * 10) + 5;
+                if (progress >= 100) {
+                    progress = 100;
+                    clearInterval(interval);
+                    setTimeout(() => {
+                        window.location.href = "/download_page"; 
+                    }, 1000);  
+                }
+                progressBar.style.width = progress + "%";
+                progressText.innerText = progress + "% completado";
+            }, 500);
+        }
+
+        document.addEventListener("DOMContentLoaded", updateProgress);
+    </script>
+</body>
+</html>
+
+

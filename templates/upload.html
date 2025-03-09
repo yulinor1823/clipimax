@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subir Video</title>
+    <style>
+        body {
+            background-color: black;
+            color: white;
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        h1 {
+            font-size: 2rem;
+            background: linear-gradient(90deg, cyan, fuchsia);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: glow 1.5s infinite alternate;
+        }
+        @keyframes glow {
+            from { text-shadow: 0 0 5px cyan, 0 0 10px fuchsia; }
+            to { text-shadow: 0 0 10px cyan, 0 0 20px fuchsia; }
+        }
+        button {
+            background: linear-gradient(45deg, fuchsia, cyan);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            margin: 20px;
+            font-size: 1.2rem;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 15px cyan;
+        }
+        input[type="file"] {
+            margin: 15px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Subiendo Video {{ video_index }} de {{ total_videos }}</h1>
+
+    <form action="{{ url_for('upload') }}" method="post" enctype="multipart/form-data">
+        <input type="file" name="file" required>
+        <input type="hidden" name="video_index" value="{{ video_index }}">
+        <button type="submit">Subir Video</button>
+    </form>
+
+    {% if video_index > 1 %}
+        <a href="{{ url_for('upload_page', video_index=video_index-1) }}"><button>Volver atrás</button></a>
+    {% endif %}
+</body>
+</html>
+
+

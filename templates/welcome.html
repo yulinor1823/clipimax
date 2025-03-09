@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bienvenido a Clipimax</title>
+    <style>
+        body {
+            background-color: black;
+            color: white;
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        h1 {
+            font-size: 2rem;
+            background: linear-gradient(90deg, cyan, fuchsia);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: glow 1.5s infinite alternate;
+        }
+        @keyframes glow {
+            from { text-shadow: 0 0 5px cyan, 0 0 10px fuchsia; }
+            to { text-shadow: 0 0 10px cyan, 0 0 20px fuchsia; }
+        }
+        button {
+            background: linear-gradient(45deg, fuchsia, cyan);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            margin: 20px;
+            font-size: 1.2rem;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 15px cyan;
+        }
+        .container {
+            max-width: 90%;
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Bienvenido a Clipimax</h1>
+        <p>Tu herramienta futurista para cortar videos de manera rápida y eficiente.</p>
+        
+        <!-- Se corrigió para que use GET en lugar de POST -->
+        <form action="{{ url_for('set_video_count_page') }}" method="get">
+            <button type="submit">Empezar</button>
+        </form>
+    </div>
+</body>
+</html>

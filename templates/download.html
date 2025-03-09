@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Descargar Videos</title>
+    <style>
+        body {
+            background-color: black;
+            color: white;
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        h1 {
+            font-size: 2rem;
+            background: linear-gradient(90deg, cyan, fuchsia);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: glow 1.5s infinite alternate;
+        }
+        @keyframes glow {
+            from { text-shadow: 0 0 5px cyan, 0 0 10px fuchsia; }
+            to { text-shadow: 0 0 10px cyan, 0 0 20px fuchsia; }
+        }
+        .button {
+            background: linear-gradient(90deg, fuchsia, cyan);
+            color: black;
+            font-size: 1.2rem;
+            padding: 15px 30px;
+            margin: 15px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 15px cyan, 0 0 25px fuchsia;
+        }
+    </style>
+</head>
+<body>
+    <h1>¡Tus videos están listos! 🎬</h1>
+    
+    <a href="/download" download>
+        <button class="button">📥 Descargar ZIP</button>
+    </a>
+
+    <form action="/reset" method="POST">
+        <button type="submit" class="button">🗑 Borrar archivos y empezar de nuevo</button>
+    </form>
+
+</body>
+</html>
+

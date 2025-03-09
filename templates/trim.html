@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recortar Videos</title>
+    <style>
+        body {
+            background-color: black;
+            color: white;
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        h1 {
+            font-size: 2rem;
+            background: linear-gradient(90deg, cyan, fuchsia);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: glow 1.5s infinite alternate;
+        }
+        @keyframes glow {
+            from { text-shadow: 0 0 5px cyan, 0 0 10px fuchsia; }
+            to { text-shadow: 0 0 10px cyan, 0 0 20px fuchsia; }
+        }
+        button {
+            background: linear-gradient(45deg, fuchsia, cyan);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            margin: 20px;
+            font-size: 1.2rem;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 15px cyan;
+        }
+        input[type="number"] {
+            padding: 10px;
+            font-size: 1.2rem;
+            margin-top: 10px;
+        }
+        .progress-container {
+            width: 80%;
+            background-color: #444;
+            border-radius: 10px;
+            margin: 20px auto;
+            display: none;
+        }
+        .progress-bar {
+            height: 20px;
+            width: 0;
+            background-color: cyan;
+            border-radius: 10px;
+            transition: width 1s ease-in-out;
+        }
+        #processing-message {
+            display: none;
+            font-size: 1.5rem;
+            color: cyan;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Recortar Videos</h1>
+    <p>Ingresa la cantidad de segundos que deseas recortar de cada video:</p>
+
+    <input type="number" id="trim_seconds" min="0" placeholder="Segundos a recortar">
+    <button onclick="startProcessing()">Cortar Videos</button>
+
+    <p id="processing-message">Procesando videos, por favor espera...</p>
+    
+    <div class="progress-container">
+        <div class="progress-bar" id="progress-bar"></div>
+    </div>
+
+    <script>
+        function startProcessing() {
+            let trimSeconds = document.getElementById('trim_seconds').value;
+            if (trimSeconds === "" || trimSeconds < 0) {
+                alert("Ingresa un número válido de segundos a recortar.");
+                return;
+            }
+
+            // Mostrar mensaje de procesando y barra de progreso
+            document.getElementById('processing-message').style.display = "block";
+            document.querySelector('.progress-container').style.display = "block";
+            let progressBar = document.getElementById('progress-bar');
+            progressBar.style.width = "10%";
+
+            fetch("{{ url_for('process_videos') }}", {
+                method: "POST",
+                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                body: `trim_seconds=${trimSeconds}`
+            }).then(response => {
+                if (response.ok) {
+                    let width = 10;
+                    let interval = setInterval(() => {
+                        if (width >= 100) {
+                            clearInterval(interval);
+                            window.location.href = "{{ url_for('download_page') }}";
+                        } else {
+                            width += 10;
+                            progressBar.style.width = width + "%";
+                        }
+                    }, 1000);
+                }
+            });
+        }
+    </script>
+</body>
+</html>
+

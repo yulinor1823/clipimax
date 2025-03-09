@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clipimax</title>
+    <style>
+        body {
+            background-color: black;
+            color: white;
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        button {
+            background-color: fuchsia;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 10px;
+            cursor: pointer;
+        }
+        input, label {
+            margin: 10px;
+        }
+        .progress-container {
+            width: 100%;
+            background-color: #444;
+            border-radius: 10px;
+            margin: 10px auto;
+            max-width: 500px;
+        }
+        .progress-bar {
+            height: 20px;
+            width: 0;
+            background-color: cyan;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Clipimax - Procesador de Videos</h1>
+    <label for="num_videos">¿Cuántos videos quieres subir?</label>
+    <input type="number" id="num_videos">
+    <button onclick="setVideoCount()">Confirmar</button>
+    <br><br>
+    <input type="file" id="video_input" accept="video/mp4">
+    <button onclick="uploadVideo()">Subir Video</button>
+    <p id="upload_status"></p>
+    <br>
+    <label for="trim_seconds">Segundos a recortar:</label>
+    <input type="number" id="trim_seconds">
+    <button onclick="processVideos()">Cortar Videos</button>
+    <br>
+    <div class="progress-container">
+        <div class="progress-bar" id="progress-bar"></div>
+    </div>
+    <p id="progress-text">0%</p>
+    <br>
+    <button onclick="downloadVideos()">Descargar ZIP</button>
+    <script>
+        let numVideos = 0;
+        let uploadedVideos = 0;
+        function setVideoCount() {
+            numVideos = document.getElementById('num_videos').value;
+            fetch('/set_video_count', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ num_videos: numVideos })
+            });
+        }
+        function uploadVideo() {
+            let input = document.getElementById('video_input');
+            let file = input.files[0];
+            let formData = new FormData();
+            formData.append('file', file);
+            fetch('/upload', { method: 'POST', body: formData })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('upload_status').innerText = data.message;
+            });
+        }
+        function processVideos() {
+            let trimSeconds = document.getElementById('trim_seconds').value;
+            fetch('/process', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ trim_seconds: trimSeconds })
+            });
+        }
+        function downloadVideos() {
+            window.location.href = '/download';
+        }
+    </script>
+</body>
+</html>

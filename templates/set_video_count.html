@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seleccionar Cantidad de Videos</title>
+    <style>
+        body {
+            background-color: black;
+            color: white;
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        h1 {
+            font-size: 2rem;
+            background: linear-gradient(90deg, cyan, fuchsia);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: glow 1.5s infinite alternate;
+        }
+        @keyframes glow {
+            from { text-shadow: 0 0 5px cyan, 0 0 10px fuchsia; }
+            to { text-shadow: 0 0 10px cyan, 0 0 20px fuchsia; }
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        input {
+            padding: 10px;
+            font-size: 1.2rem;
+            border: 2px solid fuchsia;
+            background: black;
+            color: white;
+            text-align: center;
+            border-radius: 5px;
+            margin: 10px;
+            width: 60px;
+        }
+        button {
+            background: linear-gradient(45deg, fuchsia, cyan);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            margin: 20px;
+            font-size: 1.2rem;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 15px cyan;
+        }
+    </style>
+</head>
+<body>
+    <h1>¿Cuántos videos quieres subir?</h1>
+    <form action="{{ url_for('set_video_count') }}" method="post">
+        <input type="number" name="num_videos" min="1" required>
+        <button type="submit">Confirmar</button>
+    </form>
+</body>
+</html>
