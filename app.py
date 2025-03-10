@@ -93,7 +93,7 @@ def process_videos():
             duration = max(0, clip.duration - trim_seconds)
             new_clip = clip.subclip(0, duration)
             output_path = os.path.join(PROCESSED_FOLDER, os.path.basename(file_path))
-            new_clip.write_videofile(output_path, codec='libx264', audio_codec='aac', threads=4)
+            new_clip.write_videofile(output_path, codec='libx264', audio_codec='aac', threads=4, preset="ultrafast")
         except Exception as e:
             return jsonify({"message": f"Error al procesar {file_path}: {str(e)}"}), 500
     
