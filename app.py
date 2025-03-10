@@ -6,6 +6,9 @@ import moviepy.editor as mp
 
 app = Flask(__name__)
 
+# Configuración para permitir archivos de hasta 500MB
+app.config['MAX_CONTENT_LENGTH'] = 500 * 1024 * 1024  # 500MB
+
 # Carpetas para los archivos
 UPLOAD_FOLDER = 'uploads'
 PROCESSED_FOLDER = 'processed'
@@ -51,6 +54,10 @@ def upload():
         return jsonify({"message": "No se encontró archivo"}), 400
 
     file = request.files['file']
+
+    if file.filename == '':
+        return jsonify({"message": "Nombre de archivo no válido"}), 400
+
     file_path = os.path.join(UPLOAD_FOLDER, file.filename)
     file.save(file_path)
     uploaded_files.append(file_path)
@@ -69,7 +76,10 @@ def trim_page():
 def process_videos():
     """Procesa los videos y los recorta"""
     global trim_seconds
-    trim_seconds = int(request.form.get('trim_seconds', 0))
+    try:
+        trim_seconds = int(request.form.get('trim_seconds', 0))
+    except ValueError:
+        return jsonify({"message": "Debe ingresar un número válido de segundos."}), 400
     
     if not uploaded_files:
         return jsonify({"message": "No hay videos para procesar."}), 400
@@ -78,11 +88,14 @@ def process_videos():
     os.makedirs(PROCESSED_FOLDER, exist_ok=True)
     
     for file_path in uploaded_files:
-        clip = mp.VideoFileClip(file_path)
-        duration = max(0, clip.duration - trim_seconds)
-        new_clip = clip.subclip(0, duration)
-        output_path = os.path.join(PROCESSED_FOLDER, os.path.basename(file_path))
-        new_clip.write_videofile(output_path, codec='libx264', audio_codec='aac')
+        try:
+            clip = mp.VideoFileClip(file_path)
+            duration = max(0, clip.duration - trim_seconds)
+            new_clip = clip.subclip(0, duration)
+            output_path = os.path.join(PROCESSED_FOLDER, os.path.basename(file_path))
+            new_clip.write_videofile(output_path, codec='libx264', audio_codec='aac')
+        except Exception as e:
+            return jsonify({"message": f"Error al procesar {file_path}: {str(e)}"}), 500
     
     return redirect(url_for('download_page'))
 
